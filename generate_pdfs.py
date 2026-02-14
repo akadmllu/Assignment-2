@@ -83,7 +83,7 @@ def generate_code_pdf(output_path="code.pdf"):
 
 
 def _write_report_html(out_path, sections_text, results=None, github_url=""):
-    """Write report as HTML when reportlab unavailable (Assignment-1 style)."""
+    """Write report as HTML when reportlab unavailable."""
     html_parts = [
         '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Report</title>',
         '<style>',
@@ -185,7 +185,7 @@ def generate_report_pdf(output_path="report.pdf", results_path="benchmark_result
         return
 
     def add_page_footer(canv, _doc):
-        """Draw '-- N --' at bottom center (like Assignment-1 PDF)."""
+        """Draw '-- N --' at bottom center."""
         page_num = canv.getPageNumber()
         canv.saveState()
         canv.setFont("Helvetica", 9)
@@ -209,7 +209,7 @@ def generate_report_pdf(output_path="report.pdf", results_path="benchmark_result
             story.append(Paragraph(para.replace("\n", "<br/>"), styles["Normal"]))
         story.append(Spacer(1, 12))
 
-    # Page 1: Title block (like Assignment-1)
+    # Page 1: Title block
     story.append(Paragraph(
         "<b>ML System Optimization - Assignment 2</b>",
         ParagraphStyle(name="ReportTitle", fontName="Helvetica-Bold", fontSize=14, spaceAfter=6),
