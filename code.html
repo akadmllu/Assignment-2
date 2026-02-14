@@ -417,7 +417,7 @@ CODE_FILES = [
     &quot;generate_pdfs.py&quot;,
 ]
 
-# Team contribution table (corresponding author first, will be bold in PDF)
+# Team contribution table
 TEAM_CONTRIBUTION = [
     (&quot;DEBASHIS KUMAR SERAOGI&quot;, &quot;2024ad05321&quot;, &quot;Reviewed the paper and Drafted the Problem statement and solution&quot;),
     (&quot;BANDI DEEPIKA&quot;, &quot;2024ad05231&quot;, &quot;Contributed in reviewing the paper and in drafting the Problem statement and solution&quot;),
@@ -486,14 +486,13 @@ def _write_report_html(out_path, sections_text, results=None, github_url=&quot;&
             continue  # already in title block above
         html_parts.append(f&#x27;&lt;h2&gt;{html.escape(title)}&lt;/h2&gt;&#x27;)
         if title == &quot;Facing Sheet&quot;:
-            gh = github_url or &quot;[INSERT LINK - to be included in facing sheet]&quot;
+            gh = github_url or &quot;https://github.com/akadmllu/Assignment-2&quot;
             html_parts.append(&#x27;&lt;p&gt;&lt;b&gt;GitHub (link to code):&lt;/b&gt; &#x27; + html.escape(gh) + &#x27;&lt;/p&gt;&#x27;)
-            html_parts.append(&#x27;&lt;p&gt;&lt;b&gt;Team Contribution (corresponding author in bold):&lt;/b&gt;&lt;/p&gt;&#x27;)
+            html_parts.append(&#x27;&lt;p&gt;&lt;b&gt;Team Contribution:&lt;/b&gt;&lt;/p&gt;&#x27;)
             html_parts.append(&#x27;&lt;table&gt;&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Roll Number&lt;/th&gt;&lt;th&gt;Contribution&lt;/th&gt;&lt;/tr&gt;&#x27;)
-            for i, (name, roll, contrib) in enumerate(TEAM_CONTRIBUTION):
-                name_cell = f&#x27;&lt;b&gt;{html.escape(name)}&lt;/b&gt;&#x27; if i == 0 else html.escape(name)
-                html_parts.append(f&#x27;&lt;tr&gt;&lt;td&gt;{name_cell}&lt;/td&gt;&lt;td&gt;{html.escape(roll)}&lt;/td&gt;&lt;td&gt;{html.escape(contrib)}&lt;/td&gt;&lt;/tr&gt;&#x27;)
-            html_parts.append(&#x27;&lt;/table&gt;&lt;p&gt;&lt;i&gt;Corresponding author in bold.&lt;/i&gt;&lt;/p&gt;&#x27;)
+            for name, roll, contrib in TEAM_CONTRIBUTION:
+                html_parts.append(f&#x27;&lt;tr&gt;&lt;td&gt;{html.escape(name)}&lt;/td&gt;&lt;td&gt;{html.escape(roll)}&lt;/td&gt;&lt;td&gt;{html.escape(contrib)}&lt;/td&gt;&lt;/tr&gt;&#x27;)
+            html_parts.append(&#x27;&lt;/table&gt;&#x27;)
         else:
             for p in body.split(&quot;\n\n&quot;):
                 html_parts.append(f&#x27;&lt;p&gt;{html.escape(p).replace(chr(10), &quot;&lt;br/&gt;&quot;)}&lt;/p&gt;&#x27;)
@@ -524,7 +523,7 @@ def generate_report_pdf(output_path=&quot;report.pdf&quot;, results_path=&quot;b
     github_text = github_url if github_url else &quot;[INSERT LINK - to be included in facing sheet]&quot;
     add_section(&quot;Facing Sheet&quot;,
         f&quot;GitHub: {github_text}\n\n&quot;
-        &quot;Team Contribution (corresponding author in bold):\n&quot;
+        &quot;Team Contribution:\n&quot;
         &quot;Name | Roll Number | Contribution&quot;)
     add_section(&quot;Introduction&quot;,
         &quot;This assignment addresses ML System Optimization through parallelization of the K-Means clustering algorithm. &quot;
@@ -609,13 +608,12 @@ def generate_report_pdf(output_path=&quot;report.pdf&quot;, results_path=&quot;b
     gh_text = github_url if github_url else &quot;[INSERT LINK - to be included in facing sheet]&quot;
     story.append(Paragraph(f&quot;&lt;b&gt;GitHub (link to code):&lt;/b&gt; {gh_text}&quot;, styles[&quot;Normal&quot;]))
     story.append(Spacer(1, 8))
-    story.append(Paragraph(&quot;&lt;b&gt;Team Contribution (corresponding author in bold):&lt;/b&gt;&quot;, styles[&quot;Normal&quot;]))
-    # Table: header + 5 members (first name in bold)
+    story.append(Paragraph(&quot;&lt;b&gt;Team Contribution:&lt;/b&gt;&quot;, styles[&quot;Normal&quot;]))
+    # Table: header + 5 members
     table_data = [[&quot;Name&quot;, &quot;Roll Number&quot;, &quot;Contribution&quot;]]
     small_style = ParagraphStyle(name=&quot;Small&quot;, fontName=&quot;Helvetica&quot;, fontSize=9)
-    for i, (name, roll, contrib) in enumerate(TEAM_CONTRIBUTION):
-        name_cell = Paragraph(f&quot;&lt;b&gt;{name}&lt;/b&gt;&quot;, small_style) if i == 0 else Paragraph(name, small_style)
-        table_data.append([name_cell, roll, Paragraph(contrib.replace(&quot;\n&quot;, &quot;&lt;br/&gt;&quot;), small_style)])
+    for name, roll, contrib in TEAM_CONTRIBUTION:
+        table_data.append([Paragraph(name, small_style), roll, Paragraph(contrib.replace(&quot;\n&quot;, &quot;&lt;br/&gt;&quot;), small_style)])
     tbl = Table(table_data, colWidths=[1.8 * inch, 1.1 * inch, 3.1 * inch])
     tbl.setStyle(TableStyle([
         (&quot;BACKGROUND&quot;, (0, 0), (-1, 0), colors.lightgrey),
