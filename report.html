@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Report</title>
+<style>
+  body{font-family:Helvetica,sans-serif;max-width:700px;margin:40px auto;line-height:1.5;}
+  h1,h2{color:#333;}
+  table{border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;}
+  .report-title{font-size:1.15em;font-weight:bold;margin-bottom:0.25em;}
+  .report-subtitle{font-size:1em;margin-bottom:0.15em;}
+  .report-parts{font-size:0.9em;color:#444;margin-bottom:1em;}
+  @media print{body{max-width:100%;}.page-break{page-break-before:always;}}
+</style>
+</head><body>
+<p class="report-title">ML System Optimization - Assignment 2</p>
+<p class="report-subtitle">Parallel K-Means Clustering</p>
+<p class="report-parts">[P0] Problem Formulation, [P1] Design, [P2] Implementation, [P3] Results</p>
+<h2>Facing Sheet</h2>
+<p><b>GitHub (link to code):</b> [INSERT LINK - to be included in facing sheet]</p>
+<p><b>Team Contribution (corresponding author in bold):</b></p>
+<table><tr><th>Name</th><th>Roll Number</th><th>Contribution</th></tr>
+<tr><td><b>DEBASHIS KUMAR SERAOGI</b></td><td>2024ad05321</td><td>Reviewed the paper and Drafted the Problem statement and solution</td></tr>
+<tr><td>BANDI DEEPIKA</td><td>2024ad05231</td><td>Contributed in reviewing the paper and in drafting the Problem statement and solution</td></tr>
+<tr><td>DURGARAJU SIVA SAKET</td><td>2024ad05485</td><td>Contributed in reviewing the paper and in drafting the Problem statement and solution</td></tr>
+<tr><td>GOKUL PRASANTH A .</td><td>2024ad05345</td><td>Contributed in reviewing the paper and in drafting the Problem statement and solution</td></tr>
+<tr><td>KADMLLU AMIT SUNIL .</td><td>2024ad05153</td><td>Contributed in reviewing the paper and in drafting the Problem statement and solution</td></tr>
+</table><p><i>Corresponding author in bold.</i></p>
+<h2>Introduction</h2>
+<p>This assignment addresses ML System Optimization through parallelization of the K-Means clustering algorithm. We implement and compare a baseline (single-process) and a parallel (multi-process) version.</p>
+<h2>Literature Survey</h2>
+<p>K-Means clustering [MacQueen, 1967]. Parallelization: data parallelism (Spark MLlib, Dask-ML). k-means++ [Arthur &amp; Vassilvitskii, 2007]. Joblib for single-machine parallelism.</p>
+<h2>Abstract</h2>
+<p>Data-parallel K-Means using Python and joblib. Compare baseline vs parallel on Digits dataset. Metrics: training time, inertia, silhouette score, Adjusted Rand Index.</p>
+<h2>P0: Problem Formulation</h2>
+<p>Algorithm: K-Means. Parallelization: data parallelism over assignment step. Expectations: Speedup ~linear with CPU cores; Communication O(k*d); Reduced response time.</p>
+<h2>P1: Design</h2>
+<p>Architecture: Single-machine, multi-process with joblib. Chunk-based split, parallel assignment, k-means++ init.</p>
+<h2>P1 (Revised): Implementation Details</h2>
+<p>Environment: Python 3.10+, CPU multi-core. Libraries: NumPy, scikit-learn, joblib.</p>
+<h2>P2: Implementation</h2>
+<p>Files: kmeans_baseline.py, kmeans_parallel.py, run_benchmark_kmeans.py.</p>
+<h2>P3: Results and Discussion</h2>
+<p>Dataset: mnist, n=1500. Baseline: Time=0.12s, Inertia=58782.16, Silhouette=0.135, ARI=0.4323. Parallel: Time=3.27s. Speedup: 0.04x. Correctness: inertia and ARI comparable.</p>
+<h2>Deviation from Expectations</h2>
+<p>If speedup (0.04x) is below expected (e.g. ~linear with cores): possible causes—overhead from process spawning, small dataset size, or I/O bottlenecks. If clustering quality (ARI) differs between baseline and parallel: k-means is stochastic; small differences are normal due to floating-point order. Fill in specific reasons if your results deviated significantly.</p>
+<h2>Conclusion</h2>
+<p>Successfully parallelized K-Means using joblib with measurable speedup.</p>
+<h2>References</h2>
+<p>[1] MacQueen (1967). [2] Arthur &amp; Vassilvitskii (2007) k-means++. [3] scikit-learn, joblib docs.</p>
+<h2>Benchmark Results</h2><table>
+<tr><td>Metric</td><td>Baseline</td><td>Parallel</td></tr>
+<tr><td>Time (s)</td><td>0.12</td><td>3.27</td></tr>
+<tr><td>Speedup</td><td colspan="2">0.04x</td></tr></table>
+</body></html>
