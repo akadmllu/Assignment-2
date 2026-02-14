@@ -34,13 +34,14 @@ CODE_FILES = [
     "generate_pdfs.py",
 ]
 
-# Team contribution table
+# Team contribution table (edit as needed; corresponding author in bold)
+# Format: (name, roll_number, contribution_phrase, is_corresponding_author)
 TEAM_CONTRIBUTION = [
-    ("DEBASHIS KUMAR SERAOGI", "2024ad05321", "Reviewed the paper and Drafted the Problem statement and solution"),
-    ("BANDI DEEPIKA", "2024ad05231", "Contributed in reviewing the paper and in drafting the Problem statement and solution"),
-    ("DURGARAJU SIVA SAKET", "2024ad05485", "Contributed in reviewing the paper and in drafting the Problem statement and solution"),
-    ("GOKUL PRASANTH A .", "2024ad05345", "Contributed in reviewing the paper and in drafting the Problem statement and solution"),
-    ("KADMLLU AMIT SUNIL .", "2024ad05153", "Contributed in reviewing the paper and in drafting the Problem statement and solution"),
+    ("DEBASHIS KUMAR SERAOGI", "2024ad05321", "Problem formulation, design", False),
+    ("BANDI DEEPIKA", "2024ad05231", "Literature survey, report drafting", False),
+    ("DURGARAJU SIVA SAKET", "2024ad05485", "Implementation, benchmarking", False),
+    ("GOKUL PRASANTH A.", "2024ad05345", "Testing, results analysis", False),
+    ("KADMLLU AMIT SUNIL", "2024ad05153", "Implementation, integration, submission", False),
 ]
 
 
@@ -107,8 +108,9 @@ def _write_report_html(out_path, sections_text, results=None, github_url=""):
             html_parts.append('<p><b>GitHub (link to code):</b> ' + html.escape(gh) + '</p>')
             html_parts.append('<p><b>Team Contribution:</b></p>')
             html_parts.append('<table><tr><th>Name</th><th>Roll Number</th><th>Contribution</th></tr>')
-            for name, roll, contrib in TEAM_CONTRIBUTION:
-                html_parts.append(f'<tr><td>{html.escape(name)}</td><td>{html.escape(roll)}</td><td>{html.escape(contrib)}</td></tr>')
+            for name, roll, contrib, is_corr in TEAM_CONTRIBUTION:
+                name_cell = f"<b>{html.escape(name)}</b>" if is_corr else html.escape(name)
+                html_parts.append(f'<tr><td>{name_cell}</td><td>{html.escape(roll)}</td><td>{html.escape(contrib)}</td></tr>')
             html_parts.append('</table>')
         else:
             for p in body.split("\n\n"):
@@ -229,8 +231,9 @@ def generate_report_pdf(output_path="report.pdf", results_path="benchmark_result
     # Table: header + 5 members
     table_data = [["Name", "Roll Number", "Contribution"]]
     small_style = ParagraphStyle(name="Small", fontName="Helvetica", fontSize=9)
-    for name, roll, contrib in TEAM_CONTRIBUTION:
-        table_data.append([Paragraph(name, small_style), roll, Paragraph(contrib.replace("\n", "<br/>"), small_style)])
+    for name, roll, contrib, is_corr in TEAM_CONTRIBUTION:
+        name_para = Paragraph(f"<b>{name}</b>" if is_corr else name, small_style)
+        table_data.append([name_para, roll, Paragraph(contrib.replace("\n", "<br/>"), small_style)])
     tbl = Table(table_data, colWidths=[1.8 * inch, 1.1 * inch, 3.1 * inch])
     tbl.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
@@ -344,7 +347,7 @@ def main():
     parser.add_argument("--report", action="store_true", help="Generate report.pdf")
     parser.add_argument("--all", action="store_true", help="Generate both (default)")
     parser.add_argument("--results", type=str, default="benchmark_results.json")
-    parser.add_argument("--github", type=str, default="", help="GitHub URL for code (facing sheet)")
+    parser.add_argument("--github", type=str, default="https://github.com/akadmllu/Assignment-2", help="GitHub URL for code (facing sheet)")
     args = parser.parse_args()
 
     if args.all or (not args.code and not args.report):
